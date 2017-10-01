@@ -17,3 +17,5 @@ subdirlist(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/go-problems)
 foreach(subdir ${SUBDIRS})
     add_subdirectory(${subdir})
 endforeach()
+
+set(GO_INTERFACE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/go-problems PARENT_SCOPE)
