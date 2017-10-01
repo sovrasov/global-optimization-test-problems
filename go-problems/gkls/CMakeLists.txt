@@ -11,5 +11,5 @@ target_include_directories(${PROJECT_NAME_STR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR
 target_include_directories(${PROJECT_NAME_STR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 if(IS_GNU_COMPILER)
-  target_compile_options(${PROJECT_NAME_STR} PUBLIC -fPIC)
+  target_compile_options(${PROJECT_NAME_STR} PUBLIC -fPIC -std=c++11)
 endif()

@@ -194,7 +194,12 @@ int GrishaginFunction::GetDimension() const
   return 2;
 }
 
-double GrishaginFunction::Calculate(const double* y) const
+int GrishaginFunction::GetConstraintsNumber() const
+{
+  return 0;
+}
+
+double GrishaginFunction::Calculate(const double* y, int) const
 {
   int i, j;
   double d1, d2, sx1, cx1, sy1, cy1;

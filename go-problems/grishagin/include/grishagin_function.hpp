@@ -33,14 +33,15 @@ namespace vagrish
 
     PROPERTY(int, FunctionNumber);
 
-    double Calculate(const double* y) const;
     double CalculateXDerivative(const double* y) const;
     double CalculateYDerivative(const double* y) const;
 
-    int GetOptimumPoint(double* y) const;
-    double GetOptimumValue() const;
-    void GetBounds(double* lb, double* ub) const;
-    int GetDimension() const;
+    double Calculate(const double* y, int fNumber = 0) const override;
+    int GetOptimumPoint(double* y) const override;
+    double GetOptimumValue() const override;
+    void GetBounds(double* lb, double* ub) const override;
+    int GetDimension() const override;
+    int GetConstraintsNumber() const override;
   };
 }
 #endif

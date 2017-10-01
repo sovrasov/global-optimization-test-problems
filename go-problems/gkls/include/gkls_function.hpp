@@ -206,21 +206,11 @@ namespace gkls
     PROPERTY(GKLSFuncionType, Type);
     PROPERTY(GKLSParameters, Parameters);
 
-    T_GKLS_Minima GetMinima()
-    {
-      return GKLS_minima;
-    }
-
-    T_GKLS_GlobalMinima GetGlobalMinima()
-    {
-      return GKLS_glob;
-    }
-
     void SetDefaultParameters();
     int CheckParameters() const;
     void SetFunctionClass(GKLSClass type, unsigned dimension);
 
-    double Calculate(const double* x) const;
+    double Calculate(const double* x, int fNumber = 0) const override;
 
     double CalculateNDFunction(const double* x) const;
     double CalculateDFunction(const double* x) const;
@@ -235,11 +225,11 @@ namespace gkls
 
     int CalculateD2FunctionHessian(const double* x, double** h) const;
 
-    int GetOptimumPoint(double* argmin) const;
-    void GetBounds(double* lowerBound, double* upperBound);
+    int GetOptimumPoint(double* argmin) const override;
+    void GetBounds(double* lowerBound, double* upperBound) const override;
+    int GetConstraintsNumber() const override;
 
     int SetGlobalMinimumPoint(double* argmin);
-
   };
 }
 #endif

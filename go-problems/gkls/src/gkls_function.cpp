@@ -141,7 +141,7 @@ GKLSParameters GKLSFunction::GetParameters() const
                         GKLS_global_dist, GKLS_global_radius, mFunctionType);
 }
 
-double GKLSFunction::Calculate(const double* x) const
+double GKLSFunction::Calculate(const double* x, int) const
 {
   double value = 0.;
 
@@ -1033,13 +1033,17 @@ int GKLSFunction::GetOptimumPoint(double* argmin) const
   else
     return -1;
 }
-void GKLSFunction::GetBounds(double* lowerBound, double* upperBound)
+void GKLSFunction::GetBounds(double* lowerBound, double* upperBound) const
 {
   for(unsigned i = 0; i < GKLS_dim; i++)
   {
     lowerBound[i] = GKLS_domain_left[i];
     upperBound[i] = GKLS_domain_right[i];
   }
+}
+int GKLSFunction::GetConstraintsNumber() const
+{
+  return 0;
 }
 int GKLSFunction::SetGlobalMinimumPoint(double* argmin)
 {
