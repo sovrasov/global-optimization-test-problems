@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 
+add_subdirectory(3rd-party/pybind11)
+
 macro(subdirlist result curdir)
   file(GLOB children RELATIVE ${curdir} ${curdir}/*)
   set(dirlist "")
