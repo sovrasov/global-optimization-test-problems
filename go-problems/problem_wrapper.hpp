@@ -31,6 +31,11 @@ public:
     mSourceProblem->GetBounds(mLeftBound.data(), mRightBound.data());
   }
 
+  void SetEps(fptype eps)
+  {
+    mEps = eps;
+  }
+
   fptype Calculate(const std::vector<fptype>& y, int fNumber) const
   {
     if (y.size() != static_cast<size_t>(mSourceProblem->GetDimension()))
