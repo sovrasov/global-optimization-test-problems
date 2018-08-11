@@ -83,4 +83,9 @@ public:
   {
     return mCalculationsCounters;
   }
+
+  const IGOProblem<fptype>* GetSourcePtr() const
+  {
+    return mSourceProblem.get();
+  }
 };
