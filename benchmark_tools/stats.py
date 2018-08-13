@@ -1,10 +1,22 @@
 import numpy as np
+import json
 
-def save_stats():
-    pass
+def save_stats(cmc_curve, avg_calculations, filename, capture=None):
+    stats = {}
+    stats['cmc_iters'] = list(cmc_curve[0])
+    stats['cmc_vals'] = list(cmc_curve[1])
+    stats['calc_counters'] = list(avg_calculations)
+    if capture:
+        stats['capture'] = capture
 
-def load_stats():
-    pass
+    with open(filename, 'w') as outfile:
+        json.dump(stats, outfile)
+
+def load_stats(filename):
+    stats = {}
+    with open(filename, 'r') as f:
+        stats = json.load(f)
+    return stats
 
 def compute_stats(calc_stats, solved_status):
     assert len(calc_stats) == len(solved_status)
@@ -16,7 +28,7 @@ def compute_stats(calc_stats, solved_status):
     n_iters = calc_stats[:,0]
     n_iters_solved = n_iters[np.where(solved_status)]
     max_iters = np.max(n_iters)
-    num_steps = max_iters // 150 + 1
+    num_steps = 300
     check_points = np.linspace(1, max_iters + 1, endpoint=True, num=num_steps, dtype=np.float)
     cmc_values = []
 
