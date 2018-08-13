@@ -4,11 +4,10 @@ import go_problems
 class Solver:
     def __init__(self, problem):
         pass
-
     def Solve(self, problem):
         return None
 
-def solve_class(problems_set, solver):
+def solve_class(problems_set, solver, verbose=False):
 
     all_calcs = []
     solved_satus = []
@@ -23,9 +22,7 @@ def solve_class(problems_set, solver):
             solved_satus.append(False)
         all_calcs.append(calcs)
 
-    num_solved = np.count_nonzero(solved_satus)
-
-    return all_calcs, num_solved
+    return all_calcs, solved_satus
 
 class GrishClass():
     def __init__(self):
