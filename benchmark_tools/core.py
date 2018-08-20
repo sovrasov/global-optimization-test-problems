@@ -21,7 +21,8 @@ def solve_class(problems_set, solver, verbose=False, eps_check=0.01):
         all_calcs.append(calcs)
 
         if verbose:
-            print('Problem # {}: '.format(i + 1) + ('solved' if solved_satus[-1] else 'not solved'))
+            print('Problem # {}: '.format(i + 1) + ('solved' if solved_satus[-1] else 'not solved') +
+                    ' after {} iterations'.format(calcs[0]))
 
     return all_calcs, solved_satus
 

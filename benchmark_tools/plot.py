@@ -33,8 +33,8 @@ def plot_cmcs(curves, captures=None, show=True, filename=None):
     plt.legend(loc = 'best', fontsize = 14)
     plt.tight_layout()
 
-    if show:
-        plt.show()
-
     if filename:
         plt.savefig(filename, dpi=300)
+
+    if show:
+        plt.show()

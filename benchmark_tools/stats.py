@@ -2,6 +2,8 @@ import numpy as np
 import json
 
 def save_stats(cmc_curve, avg_calculations, filename, capture=None):
+    if len(filename) == 0:
+        return
     stats = {}
     stats['cmc_iters'] = list(cmc_curve[0])
     stats['cmc_vals'] = list(cmc_curve[1])
@@ -35,6 +37,6 @@ def compute_stats(calc_stats, solved_status):
     for i in range(len(check_points)):
         cmc_values.append(len(n_iters_solved[n_iters_solved < check_points[i]]))
 
-    cmc_values = np.array(cmc_values) / len(solved_status)
+    cmc_values = np.array(cmc_values) / float(len(solved_status))
 
     return (check_points, cmc_values), avg_calcs, num_solved
