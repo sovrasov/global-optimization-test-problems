@@ -20,14 +20,17 @@ def plot_cmcs(curves, captures=None, show=True, filename=None):
     plt.yticks(fontsize=13)
 
     min_iters = sys.maxsize
+    max_iters = 0
     for curve in curves:
         min_iters = min(curve[0][-1], min_iters)
+        max_iters = max(curve[0][-1], max_iters)
 
-    plt.xlim([0., min_iters*1.2])
+    plt.xlim([0., min(max_iters, min_iters*2)])
 
     for i, curve in enumerate(curves):
         plt.plot(curve[0], curve[1], color = colors[i], \
-            linestyle = linestyles[i], label = captures[i], markersize=3, linewidth=2)
+            #linestyle = linestyles[i],
+             label = captures[i], markersize=3, linewidth=2)
 
     plt.grid()
     plt.legend(loc = 'best', fontsize = 14)
