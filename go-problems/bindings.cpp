@@ -55,5 +55,8 @@ PYBIND11_MODULE(go_problems, m)
     .def("GetBounds", &GOTestProblemWrapper<double>::GetBounds)
     .def("GetCalculationsStatistics", &GOTestProblemWrapper<double>::GetCalculationsStatistics)
     .def("SetEps", &GOTestProblemWrapper<double>::SetEps)
+    .def("IsStatsUpdateStopped", &GOTestProblemWrapper<double>::IsStatsUpdateStopped)
+    .def("GetLoggedTrials", &GOTestProblemWrapper<double>::GetLoggedTrials)
+    .def("EnableLogging", &GOTestProblemWrapper<double>::EnableLogging)
     ;
 }

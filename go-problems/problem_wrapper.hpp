@@ -16,11 +16,13 @@ private:
   std::vector<fptype> mOptimumPoint;
   std::vector<fptype> mLeftBound;
   std::vector<fptype> mRightBound;
+  mutable std::vector<std::vector<fptype>> mTrials;
   mutable bool mStopCollectStats;
+  bool mLogTrials;
   fptype mEps;
 public:
-  GOTestProblemWrapper(std::shared_ptr<IGOProblem<fptype>> problem, fptype eps = -1.) :
-    mSourceProblem(problem), mStopCollectStats(false), mEps(eps)
+  GOTestProblemWrapper(std::shared_ptr<IGOProblem<fptype>> problem, bool log_trials=false, fptype eps = -1.) :
+    mSourceProblem(problem), mStopCollectStats(false), mEps(eps), mLogTrials(log_trials)
   {
     mCalculationsCounters = std::vector<int>(mSourceProblem->GetConstraintsNumber() + 1);
     std::fill(mCalculationsCounters.begin(), mCalculationsCounters.end(), 0);
@@ -36,6 +38,16 @@ public:
     mEps = eps;
   }
 
+  void EnableLogging()
+  {
+    mLogTrials = true;
+  }
+
+  bool IsStatsUpdateStopped() const
+  {
+    return mStopCollectStats;
+  }
+
   fptype Calculate(const std::vector<fptype>& y, int fNumber) const
   {
     if (y.size() != static_cast<size_t>(mSourceProblem->GetDimension()))
@@ -43,7 +55,9 @@ public:
     fptype value = mSourceProblem->Calculate(y.data(), fNumber);
     if (!mStopCollectStats)
       mCalculationsCounters[fNumber]++;
-    if (mEps > 0)
+    if (mLogTrials)
+      mTrials.push_back(y);
+    if (mEps > 0 && !mStopCollectStats)
     {
       double dist = std::numeric_limits<double>::lowest();
       for (size_t i = 0; i < mOptimumPoint.size(); i++)
@@ -87,5 +101,10 @@ public:
   const IGOProblem<fptype>* GetSourcePtr() const
   {
     return mSourceProblem.get();
+  }
+
+  const std::vector<std::vector<fptype>> GetLoggedTrials() const
+  {
+    return mTrials;
   }
 };
