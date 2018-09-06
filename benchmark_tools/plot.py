@@ -7,7 +7,7 @@ from os.path import isfile, join
 
 matplotlib.style.use('classic')
 
-colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k', 'tab:brown', 'w')
+colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k', 'tab:brown', 'tab:orange', 'tab:gray', 'tab:orange')
 linestyles = ['--', '-', '--', ':', '-.', '--', ':', '-', '--']
 
 def plot_cmcs(curves, captures=None, show=True, filename=None):
