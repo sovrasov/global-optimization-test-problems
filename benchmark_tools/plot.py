@@ -1,5 +1,6 @@
 import sys
 import numpy as np
+import math
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib.lines import Line2D
@@ -10,7 +11,7 @@ matplotlib.style.use('classic')
 colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k', 'tab:brown', 'tab:orange', 'tab:gray', 'tab:orange')
 linestyles = ['--', '-', '--', ':', '-.', '--', ':', '-', '--']
 
-def plot_cmcs(curves, captures=None, show=True, filename=None):
+def plot_cmcs(curves, captures=None, show=True, filename=None, log=False):
     if captures != None:
         assert len(captures) == len(curves)
 
@@ -25,10 +26,20 @@ def plot_cmcs(curves, captures=None, show=True, filename=None):
         min_iters = min(curve[0][-1], min_iters)
         max_iters = max(curve[0][-1], max_iters)
 
-    plt.xlim([0., min(max_iters, min_iters*2)])
+    if not log:
+        plt_fun = plt.plot
+        plt.xlim([0., min(max_iters, min_iters*2)])
+    else:
+        plt_fun = plt.semilogx
+        start = 10
+        if min_iters > 10**3:
+            start = 10**2
+        elif min_iters > 10**4:
+            start = 2*10**2
+        plt.xlim([start, max_iters + 10**math.log(max_iters, 10)/4.])
 
     for i, curve in enumerate(curves):
-        plt.plot(curve[0], curve[1], color = colors[i], \
+        plt_fun(curve[0], curve[1], color = colors[i], \
             #linestyle = linestyles[i],
              label = captures[i], markersize=3, linewidth=2)
 
