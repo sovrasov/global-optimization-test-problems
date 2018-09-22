@@ -8,6 +8,7 @@ def save_stats(stats_dict, filename, capture=None):
     stats['cmc_iters'] = list(stats_dict['cmc'][0])
     stats['cmc_vals'] = list(stats_dict['cmc'][1])
     stats['calc_counters'] = list(stats_dict['avg_calcs'])
+    stats['calc_counters_std'] = list(stats_dict['std_dev_calcs'])
     stats['num_solved'] = stats_dict['num_solved']
     if capture:
         stats['capture'] = capture
@@ -27,6 +28,7 @@ def compute_stats(calc_stats, solved_status):
     num_solved = np.count_nonzero(solved_status)
     calc_stats = np.array(calc_stats)
     avg_calcs = np.mean(calc_stats[solved_status], axis = 0)
+    std_dev_calcs = np.std(calc_stats[solved_status], axis = 0)
 
     n_iters = calc_stats[:,0]
     n_iters_solved = n_iters[np.where(solved_status)]
@@ -40,4 +42,5 @@ def compute_stats(calc_stats, solved_status):
 
     cmc_values = np.array(cmc_values) / float(len(solved_status))
 
-    return {'cmc': (check_points, cmc_values), 'avg_calcs': avg_calcs, 'num_solved': num_solved}
+    return {'cmc': (check_points, cmc_values), 'avg_calcs': avg_calcs, \
+            'std_dev_calcs': std_dev_calcs,  'num_solved': num_solved}
