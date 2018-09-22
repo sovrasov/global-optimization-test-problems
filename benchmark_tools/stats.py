@@ -4,11 +4,13 @@ import json
 def save_stats(stats_dict, filename, capture=None):
     if len(filename) == 0:
         return
+    def round_floats_list(lst, n=3):
+        return [round(elem, n) for elem in lst]
     stats = {}
-    stats['cmc_iters'] = list(stats_dict['cmc'][0])
-    stats['cmc_vals'] = list(stats_dict['cmc'][1])
-    stats['calc_counters'] = list(stats_dict['avg_calcs'])
-    stats['calc_counters_std'] = list(stats_dict['std_dev_calcs'])
+    stats['cmc_iters'] = round_floats_list(list(stats_dict['cmc'][0]))
+    stats['cmc_vals'] = round_floats_list(list(stats_dict['cmc'][1]))
+    stats['calc_counters'] = round_floats_list(list(stats_dict['avg_calcs']))
+    stats['calc_counters_std'] = round_floats_list(list(stats_dict['std_dev_calcs']))
     stats['num_solved'] = stats_dict['num_solved']
     if capture:
         stats['capture'] = capture
