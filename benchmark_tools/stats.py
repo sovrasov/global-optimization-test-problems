@@ -25,24 +25,31 @@ def load_stats(filename):
     return stats
 
 def compute_stats(calc_stats, solved_status):
+    assert len(calc_stats) > 0
     assert len(calc_stats) == len(solved_status)
 
     num_solved = np.count_nonzero(solved_status)
-    calc_stats = np.array(calc_stats)
-    avg_calcs = np.mean(calc_stats[solved_status], axis = 0)
-    std_dev_calcs = np.std(calc_stats[solved_status], axis = 0)
+    if num_solved > 0:
+        calc_stats = np.array(calc_stats)
+        avg_calcs = np.mean(calc_stats[solved_status], axis = 0)
+        std_dev_calcs = np.std(calc_stats[solved_status], axis = 0)
 
-    n_iters = calc_stats[:,0]
-    n_iters_solved = n_iters[np.where(solved_status)]
-    max_iters = np.max(n_iters)
-    num_steps = 300
-    check_points = np.linspace(1, max_iters + 1, endpoint=True, num=num_steps, dtype=np.float)
-    cmc_values = []
+        n_iters = calc_stats[:,0]
+        n_iters_solved = n_iters[np.where(solved_status)]
+        max_iters = np.max(n_iters)
+        num_steps = 300
+        check_points = np.linspace(1, max_iters + 1, endpoint=True, num=num_steps, dtype=np.float)
+        cmc_values = []
 
-    for i in range(len(check_points)):
-        cmc_values.append(len(n_iters_solved[n_iters_solved < check_points[i]]))
+        for i in range(len(check_points)):
+            cmc_values.append(len(n_iters_solved[n_iters_solved < check_points[i]]))
 
-    cmc_values = np.array(cmc_values) / float(len(solved_status))
+        cmc_values = np.array(cmc_values) / float(len(solved_status))
+    else:
+        check_points=[0.]
+        cmc_values=[0.]
+        avg_calcs = [0.]*len(calc_stats[0])
+        std_dev_calcs = [0.]*len(calc_stats[0])
 
     return {'cmc': (check_points, cmc_values), 'avg_calcs': avg_calcs, \
             'std_dev_calcs': std_dev_calcs,  'num_solved': num_solved}
