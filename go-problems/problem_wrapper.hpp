@@ -4,11 +4,12 @@
 #include <memory>
 #include <stdexcept>
 #include <limits>
+#include <functional>
 
 #include "problem_interface.hpp"
 
 template <class fptype>
-class GOTestProblemWrapper
+class GOTestProblemWrapper : public IGOProblem<fptype>
 {
 private:
   std::shared_ptr<IGOProblem<fptype>> mSourceProblem;
@@ -20,9 +21,10 @@ private:
   mutable bool mStopCollectStats;
   bool mLogTrials;
   fptype mEps;
+  std::function<fptype()> mComputeLoad = [] { return 1; };
 public:
   GOTestProblemWrapper(std::shared_ptr<IGOProblem<fptype>> problem, bool log_trials=false, fptype eps = -1.) :
-    mSourceProblem(problem), mStopCollectStats(false), mEps(eps), mLogTrials(log_trials)
+    mSourceProblem(problem), mStopCollectStats(false), mLogTrials(log_trials), mEps(eps)
   {
     mCalculationsCounters = std::vector<int>(mSourceProblem->GetConstraintsNumber() + 1);
     std::fill(mCalculationsCounters.begin(), mCalculationsCounters.end(), 0);
@@ -31,6 +33,11 @@ public:
     mLeftBound.resize(mSourceProblem->GetDimension());
     mRightBound.resize(mSourceProblem->GetDimension());
     mSourceProblem->GetBounds(mLeftBound.data(), mRightBound.data());
+  }
+
+  void SetComputeLoad(std::function<fptype()> compute)
+  {
+    mComputeLoad = compute;
   }
 
   void SetEps(fptype eps)
@@ -48,11 +55,29 @@ public:
     return mStopCollectStats;
   }
 
+  fptype Calculate(const double* y, int fNumber) const
+  {
+    fptype k = mComputeLoad();
+    fptype value = mSourceProblem->Calculate(y, fNumber) * k;
+    return value / k;
+  }
+
+  void GetBounds(fptype* left, fptype* right) const
+  {
+    mSourceProblem->GetBounds(left, right);
+  }
+
+  int GetOptimumPoint(fptype* y) const
+  {
+    return mSourceProblem->GetOptimumPoint(y);
+  }
+
   fptype Calculate(const std::vector<fptype>& y, int fNumber) const
   {
     if (y.size() != static_cast<size_t>(mSourceProblem->GetDimension()))
       throw std::runtime_error("Wrong input dimension");
-    fptype value = mSourceProblem->Calculate(y.data(), fNumber);
+    fptype k = mComputeLoad();
+    fptype value = mSourceProblem->Calculate(y.data(), fNumber) * k;
     if (!mStopCollectStats)
       mCalculationsCounters[fNumber]++;
     if (mLogTrials)
@@ -65,7 +90,7 @@ public:
       if (dist < mEps)
         mStopCollectStats = true;
     }
-    return value;
+    return value / k;
   }
 
   int GetConstraintsNumber() const
