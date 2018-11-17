@@ -14,6 +14,8 @@ def save_stats(stats_dict, filename, capture=None):
     stats['num_solved'] = stats_dict['num_solved']
     if capture:
         stats['capture'] = capture
+    if 'avg_time' in stats_dict.keys():
+        stats['avg_time'] = round(stats_dict['avg_time'], 3)
 
     with open(filename, 'w') as outfile:
         json.dump(stats, outfile)
@@ -24,7 +26,7 @@ def load_stats(filename):
         stats = json.load(f)
     return stats
 
-def compute_stats(calc_stats, solved_status):
+def compute_stats(calc_stats, solved_status, execution_times=None):
     assert len(calc_stats) > 0
     assert len(calc_stats) == len(solved_status)
 
@@ -51,5 +53,12 @@ def compute_stats(calc_stats, solved_status):
         avg_calcs = [0.]*len(calc_stats[0])
         std_dev_calcs = [0.]*len(calc_stats[0])
 
-    return {'cmc': (check_points, cmc_values), 'avg_calcs': avg_calcs, \
+    stats = {'cmc': (check_points, cmc_values), 'avg_calcs': avg_calcs, \
             'std_dev_calcs': std_dev_calcs,  'num_solved': num_solved}
+
+    if execution_times != None:
+        assert len(execution_times) == len(solved_status)
+        avg_time = np.mean(execution_times)
+        stats['avg_time'] = avg_time
+
+    return stats
