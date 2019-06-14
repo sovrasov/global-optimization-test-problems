@@ -53,7 +53,7 @@ def plot_cmcs(curves, captures=None, show=True, filename=None, log=False):
     if show:
         plt.show()
 
-def plot_countours(functions, bounds, filename, show=False, points=None):
+def plot_countours(functions, bounds, filename, show=False, points=None, evolvent_points=None):
     lb, ub = bounds
     assert len(lb) == len(ub) == 2
     assert len(functions) > 0
@@ -94,6 +94,12 @@ def plot_countours(functions, bounds, filename, show=False, points=None):
                 for j in range(len(Y)):
                     Z_c[i, j] = f([X[i, j], Y[i, j]])
             plt.contour(X, Y, Z_c, [0], colors='k', extent=[lb[0],ub[0],lb[1],ub[1]])
+
+    if evolvent_points is not None:
+        evolvent_points = np.array(evolvent_points)
+        x, y = (ub[0] - lb[0])*evolvent_points[:,0] + 0.5*(ub[0] - lb[0]), \
+               (ub[1] - lb[1])*evolvent_points[:,1] + 0.5*(ub[1] + lb[1])
+        plt.plot(x, y, 'b-', alpha = .8)
 
     plt.clabel(CS, inline=1, fontsize=10)
     plt.xlabel(r'$x$', fontsize=15)
